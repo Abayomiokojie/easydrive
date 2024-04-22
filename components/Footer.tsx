@@ -8,13 +8,19 @@ const Footer = () => (
     <div className="flex flex-col  xl:max-w-[1440px] xl:mx-auto">
       <div className="flex max-md:flex-col flex-wrap justify-between gap-12 xl:gap-44 sm:px-16 px-6 py-10 ">
         <div className="flex flex-col justify-start items-start gap-6">
-          <Image
-            src="/logo.svg"
-            alt="logo"
-            width={118}
-            height={18}
-            className="object-contain"
-          />
+          <div>
+            <Image
+              src="/carhub2.png"
+              alt="logo"
+              width={118}
+              height={18}
+              className="object-contain h-12 w-fit"
+            />
+            <span className="lg:text-2xl sm:text-xl text-lg font-bold font-inter ">
+              EasyDrive
+            </span>
+          </div>
+
           <p className="text-base text-gray-700">
             EasyDrive 2024 <br />
             All Rights Reserved &copy;
