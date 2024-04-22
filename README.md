@@ -6,7 +6,7 @@
   <br />
 
  <h3> 
-    <a href="https://easydrive-ruddy.vercel.app"> Visit App Demo </a>
+    <a href="https://easydrive-iota.vercel.app/"> Visit App Demo </a>
  </h3>
 
   <div>
