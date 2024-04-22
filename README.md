@@ -1,6 +1,6 @@
 <div align="center">
    <br />
-    <h1 align="center"># EasyDrive
+    <h1 align="center"> EasyDrive
  </h1>
     <p>A Next.js 14 Web application to Find, book, and rent a car quickly and easily</p>
   <br />
