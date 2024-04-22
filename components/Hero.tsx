@@ -38,6 +38,7 @@ const Hero = () => {
             alt="hero"
             fill
             className="object-contain -mt-16 sm:-mt-6"
+            priority
           />
         </div>
 
