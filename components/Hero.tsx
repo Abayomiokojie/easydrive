@@ -31,7 +31,14 @@ const Hero = () => {
           handleClick={handleScroll}
         />
       </div>
-      <div className="hero__image-container">
+      <div className="hero__image-container ">
+        {/* <Image
+          src="/hero.png"
+          alt="hero"
+          fill
+          priority
+          className="object-contain -mt-16 sm:-mt-6"
+        /> */}
         <div className="hero__image">
           <Image
             src="/hero.png"
@@ -39,6 +46,8 @@ const Hero = () => {
             fill
             className="object-contain -mt-16 sm:-mt-6"
             priority
+            // sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+            // sizes="1200px"
           />
         </div>
 
