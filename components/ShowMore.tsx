@@ -7,27 +7,15 @@ import { updateSearchParams } from "@utils";
 import { CustomButton } from "@components";
 import { useState } from "react";
 
-const ShowMore = ({ pageNumber, isNext }: ShowMoreProps) => {
-  const router = useRouter();
-
-  const handleNavigation = () => {
-    // Calculate the new limit based on the page number and navigation type
-    const newLimit = (pageNumber + 1) * 10;
-
-    // Update the "limit" search parameter in the URL with the new value
-    const newPathname = updateSearchParams("limit", `${newLimit}`);
-
-    router.push(newPathname, { scroll: false });
-  };
-
+const ShowMore = ({ pageNumber, isNext, onClick }: ShowMoreProps) => {
   return (
     <div className="w-full flex-center gap-5 mt-10">
-      {!isNext && (
+      {isNext && (
         <CustomButton
           btnType="button"
           title="Show More"
           containerStyles="bg-red-700 hover:bg-red-800 rounded-full text-white"
-          handleClick={handleNavigation}
+          handleClick={onClick}
         />
       )}
     </div>

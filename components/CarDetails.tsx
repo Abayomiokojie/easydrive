@@ -44,6 +44,7 @@ const CarDetails = ({ isOpen, closeModal, car }: CarDetailsProps) => (
                   className="absolute top-2 right-2 z-10 w-fit p-2 bg-primary-blue-100 rounded-full"
                   onClick={closeModal}
                 >
+                  <span className="sr-only">Close</span>
                   <Image
                     src="/close.svg"
                     alt="close"
@@ -105,17 +106,21 @@ const CarDetails = ({ isOpen, closeModal, car }: CarDetailsProps) => (
                   </h2>
 
                   <div className="mt-3 flex flex-wrap gap-4">
-                    {Object.entries(car).map(([key, value]) => (
-                      <div
-                        className="flex justify-between gap-5 w-full text-right"
-                        key={key}
-                      >
-                        <h4 className="text-grey capitalize">
-                          {key.split("_").join(" ")}
-                        </h4>
-                        <p className="text-black-100 font-semibold">{value}</p>
-                      </div>
-                    ))}
+                    {Object.entries(car)
+                      .filter(([key]) => key !== "imageUrl")
+                      .map(([key, value]) => (
+                        <div
+                          className="flex justify-between gap-5 w-full text-right"
+                          key={key}
+                        >
+                          <h4 className="text-grey capitalize">
+                            {key.split("_").join(" ")}
+                          </h4>
+                          <p className="text-black-100 font-semibold">
+                            {value}
+                          </p>
+                        </div>
+                      ))}
                   </div>
                 </div>
               </Dialog.Panel>

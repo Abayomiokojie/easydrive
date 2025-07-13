@@ -7,26 +7,32 @@ import { Listbox, Transition } from "@headlessui/react";
 import { CustomFilterProps } from "@types";
 import { updateSearchParams } from "@utils";
 
-export default function CustomFilter({ title, options }: CustomFilterProps) {
+interface CustomFilterClientProps extends CustomFilterProps {
+  onChange?: (value: string) => void;
+}
+
+export default function CustomFilter({
+  title,
+  options,
+  onChange,
+}: CustomFilterClientProps) {
   const router = useRouter();
-  const [selected, setSelected] = useState(options[0]); // State for storing the selected option
+  const [selected, setSelected] = useState(options[0]);
 
-  // update the URL search parameters and navigate to the new URL
   const handleUpdateParams = (e: { title: string; value: string }) => {
-    const newPathname = updateSearchParams(title, e.value.toLowerCase());
-
-    router.push(newPathname, { scroll: false });
+    if (onChange) {
+      setSelected(e);
+      onChange(e.value);
+    } else {
+      const newPathname = updateSearchParams(title, e.value.toLowerCase());
+      setSelected(e);
+      router.push(newPathname, { scroll: false });
+    }
   };
 
   return (
     <div className="w-fit">
-      <Listbox
-        value={selected}
-        onChange={(e) => {
-          setSelected(e); // Update the selected option in state
-          handleUpdateParams(e); // Update the URL search parameters and navigate to the new URL
-        }}
-      >
+      <Listbox value={selected} onChange={handleUpdateParams}>
         <div className="relative w-fit z-10">
           {/* Button for the listbox */}
           <Listbox.Button className="custom-filter__btn">

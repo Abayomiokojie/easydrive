@@ -8,6 +8,7 @@ import { SearchManufacturer } from "./";
 
 const SearchButton = ({ otherClasses }: { otherClasses: string }) => (
   <button type="submit" className={`-ml-3 z-10 ${otherClasses}`}>
+    <span className="sr-only">submit</span>
     <Image
       src={"/magnifying-glass.svg"}
       alt={"magnifying glass"}
@@ -18,45 +19,42 @@ const SearchButton = ({ otherClasses }: { otherClasses: string }) => (
   </button>
 );
 
-const SearchBar = () => {
+interface SearchBarProps {
+  onSearch?: (params: { manufacturer: string; model: string }) => void;
+}
+
+const SearchBar = ({ onSearch }: SearchBarProps) => {
   const [manufacturer, setManuFacturer] = useState("");
   const [model, setModel] = useState("");
-
   const router = useRouter();
 
   const handleSearch = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-
     if (manufacturer.trim() === "" && model.trim() === "") {
       return alert("Please provide some input");
     }
-
-    updateSearchParams(model.toLowerCase(), manufacturer.toLowerCase());
+    if (onSearch) {
+      onSearch({ manufacturer, model });
+    } else {
+      updateSearchParams(model.toLowerCase(), manufacturer.toLowerCase());
+    }
   };
 
   const updateSearchParams = (model: string, manufacturer: string) => {
-    // Create a new URLSearchParams object using the current URL search parameters
     const searchParams = new URLSearchParams(window.location.search);
-
-    // Update or delete the 'model' search parameter based on the 'model' value
     if (model) {
       searchParams.set("model", model);
     } else {
       searchParams.delete("model");
     }
-
-    // Update or delete the 'manufacturer' search parameter based on the 'manufacturer' value
     if (manufacturer) {
       searchParams.set("manufacturer", manufacturer);
     } else {
       searchParams.delete("manufacturer");
     }
-
-    // Generate the new pathname with the updated search parameters
     const newPathname = `${
       window.location.pathname
     }?${searchParams.toString()}`;
-
     router.push(newPathname, { scroll: false });
   };
 
@@ -66,10 +64,14 @@ const SearchBar = () => {
         <SearchManufacturer
           manufacturer={manufacturer}
           setManuFacturer={setManuFacturer}
+          onClear={() => {
+            setManuFacturer("");
+            if (onSearch) onSearch({ manufacturer: "", model });
+          }}
         />
         <SearchButton otherClasses="sm:hidden" />
       </div>
-      <div className="searchbar__item">
+      <div className="searchbar__item relative">
         <Image
           src="/model-icon.png"
           width={25}
@@ -83,8 +85,34 @@ const SearchBar = () => {
           value={model}
           onChange={(e) => setModel(e.target.value)}
           placeholder="Tiguan..."
-          className="searchbar__input"
+          className="searchbar__input pr-8"
         />
+        {/* Clear (X) button for model */}
+        {model && (
+          <button
+            type="button"
+            className="absolute right-2 top-1/2 -translate-y-1/2 p-1 text-gray-400 hover:text-gray-700 focus:outline-none"
+            onClick={() => setModel("")}
+            tabIndex={-1}
+          >
+            <span className="sr-only">clear</span>
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              width="16"
+              height="16"
+              fill="none"
+              viewBox="0 0 24 24"
+              stroke="currentColor"
+            >
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                strokeWidth={2}
+                d="M6 18L18 6M6 6l12 12"
+              />
+            </svg>
+          </button>
+        )}
         <SearchButton otherClasses="sm:hidden" />
       </div>
       <SearchButton otherClasses="max-sm:hidden" />

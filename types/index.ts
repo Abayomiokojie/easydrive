@@ -13,6 +13,7 @@ export interface CarProps {
   model: string;
   transmission: string;
   year: number;
+  imageUrl: string;
 }
 
 export interface FilterProps {
@@ -60,6 +61,7 @@ export interface CustomFilterProps {
 export interface ShowMoreProps {
   pageNumber: number;
   isNext: boolean;
+  onClick?: () => void;
 }
 
 export interface SearchManuFacturerProps {

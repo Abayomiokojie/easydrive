@@ -1,4 +1,5 @@
 import { CarProps, FilterProps } from "@types";
+import { mockCars } from "@constants/mockCars";
 
 export const updateSearchParams = (type: string, value: string) => {
   // Get the current URL search params
@@ -21,25 +22,12 @@ export const deleteSearchParams = (type: string) => {
   newSearchParams.delete(type.toLocaleLowerCase());
 
   // Construct the updated URL pathname with the deleted search parameter
-  const newPathname = `${window.location.pathname}?${newSearchParams.toString()}`;
+  const newPathname = `${
+    window.location.pathname
+  }?${newSearchParams.toString()}`;
 
   return newPathname;
 };
-
-export const generateCarImageUrl = (car: CarProps, angle?: string) => {
-  const url = new URL("https://cdn.imagin.studio/getimage");
-  const { make, model, year } = car;
-
-    url.searchParams.append('customer', process.env.IMAGIN_API_KEY || '');
-  url.searchParams.append('make', make);
-  url.searchParams.append('modelFamily', model.split(" ")[0]);
-  url.searchParams.append('zoomType', 'fullscreen');
-  url.searchParams.append('modelYear', `${year}`);
-  // url.searchParams.append('zoomLevel', zoomLevel);
-  url.searchParams.append('angle', `${angle}`);
-
-  return `${url}`;
-} 
 
 export const calculateCarRent = (city_mpg: number, year: number) => {
   const basePricePerDay = 50; // Base rental price per day in dollars
@@ -56,24 +44,57 @@ export const calculateCarRent = (city_mpg: number, year: number) => {
   return rentalRatePerDay.toFixed(0);
 };
 
+// export const generateCarImageUrl = (car: CarProps, angle?: string) => {
+//   const url = new URL("https://cdn.imagin.studio/getimage");
+//   const { make, model, year } = car;
+
+//   url.searchParams.append("customer", process.env.IMAGIN_API_KEY || "");
+//   url.searchParams.append("make", make);
+//   url.searchParams.append("modelFamily", model.split(" ")[0]);
+//   url.searchParams.append("zoomType", "fullscreen");
+//   url.searchParams.append("modelYear", `${year}`);
+//   url.searchParams.append("zoomLevel", "");
+//   url.searchParams.append("angle", `${angle}`);
+
+//   return `${url}`;
+// };
+
+// lib/image.ts
+export const generateCarImageUrl = (car: CarProps, angle: string = "01") => {
+  const url = new URL("https://cdn.imagin.studio/getimage");
+
+  url.searchParams.append("customer", process.env.IMAGIN_API_KEY ?? "");
+  url.searchParams.append("make", car.make);
+  url.searchParams.append("modelFamily", car.model.split(" ")[0]);
+  url.searchParams.append("zoomType", "fullscreen");
+  url.searchParams.append("modelYear", `${car.year}`);
+  url.searchParams.append("angle", angle);
+
+  return url.toString();
+};
 
 export async function fetchCars(filters: FilterProps) {
-const { manufacturer, year, model, limit, fuel } = filters;
-
-  const headers = {
-    'X-RapidAPI-Key': process.env.RAPID_API_KEY || "",
-		'X-RapidAPI-Host': 'cars-by-api-ninjas.p.rapidapi.com'
+  const { manufacturer, year, model, fuel } = filters;
+  // Filter the mockCars array based on the filters
+  let cars = mockCars;
+  if (manufacturer) {
+    cars = cars.filter((car) =>
+      car.make.toLowerCase().includes(manufacturer.toLowerCase())
+    );
   }
-
-  // Set the required headers for the API request
-  const response = await fetch(`https://cars-by-api-ninjas.p.rapidapi.com/v1/cars?make=${manufacturer}&year=${year}&model=${model}&limit=${limit}&fuel_type=${fuel}`,
-    {
-      headers: headers,
-    }
-  );
-
-  // Parse the response as JSON
-  const result = await response.json();
-
-  return result;
+  if (year && String(year).trim() !== "") {
+    cars = cars.filter((car) => car.year === Number(year));
+  }
+  if (model) {
+    cars = cars.filter((car) =>
+      car.model.toLowerCase().includes(model.toLowerCase())
+    );
+  }
+  if (fuel) {
+    cars = cars.filter((car) =>
+      car.fuel_type.toLowerCase().includes(fuel.toLowerCase())
+    );
+  }
+  return cars;
+  // (end of file)
 }
