@@ -15,9 +15,9 @@ const NavBar = () => (
           alt="logo"
           width={118}
           height={18}
-          className="object-contain h-12 w-fit"
+          className="object-contain h-12"
         />
-        <span className="sm:text-2xl text-lg font-bold font-inter ">
+        <span className="sm:text-2xl text-lg font-bold font-inter sm:-ml-4 ">
           EasyDrive
         </span>
       </Link>
